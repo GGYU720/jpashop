@@ -5,16 +5,20 @@ import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import jpabook.jpashop.repository.OrderRepository;
+import jpabook.jpashop.repository.OrderSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderService {
-    private final MemberRepository memberRepository;
+
     private final OrderRepository orderRepository;
+    private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
 
     /**
@@ -40,6 +44,7 @@ public class OrderService {
 
         //주문 저장
         orderRepository.save(order);
+
         return order.getId();
     }
 
@@ -54,10 +59,8 @@ public class OrderService {
         order.cancel();
     }
 
-    /* 주문 검색 */
-/*
- public List<Order> findOrders(OrderSearch orderSearch) {
- return orderRepository.findAll(orderSearch);
- }
-*/
+    //검색
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAllByString(orderSearch);
+    }
 }
